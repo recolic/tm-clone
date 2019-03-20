@@ -1,0 +1,7 @@
+__pycache__
+daemon.c
+daemon
+
+*.pyc
+*.list
+*.gi

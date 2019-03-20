@@ -1,0 +1,184 @@
+<!--
+curl examples:
+# Query task
+curl 'https://tm.recolic.net/querytask?openid=23251fc131e118d07fc9932f3c3de92c'
+# Add task
+curl 'https://tm.recolic.net/addtask?openid=23251fc131e118d07fc9932f3c3de92c&N=30.508914&E=114.40718&key=2ILF-JRTG-3VT3-EHQL'
+-->
+
+<html>
+	<head>
+		<title>微助教在线自动签到</title>
+		<style>
+			body{
+				background:url(https://recolic.net/resource/background.png);
+			}
+			.contents{
+				margin-left:25%;
+				margin-top:10%;
+				background-color:rgba(255,255,255,0.5);
+				border:1px #000;
+				border-radius:8px;
+				width:512px;
+				color:#FFF;
+				height:850px;
+				font-family:微软雅黑;
+			}
+			.title{
+				font-size:32px;
+			}
+			.text{
+				font-size:18px;
+			}
+			.footer{
+				text-align:right;
+				font-size:14px;
+			}
+			.inputAreaCss{
+				width:256px;
+				height:23px;
+				border-radius:8px;
+				border:0px;
+				background:rgba(255,255,255,0.5);
+				color:#FFF;
+			}
+			.inputButtonCss{
+				width:64px;
+				height:23px;
+				border:0px;
+				border-radius:8px;
+				background:#000;
+				color:#FFF;
+			}
+		</style>
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+    <script>
+        if(typeof(String.prototype.trim) === "undefined")
+        {
+            String.prototype.trim = function() 
+            {
+                return String(this).replace(/^\s+|\s+$/g, '');
+            };
+        }
+    </script>
+    <script>
+        function subm_querytask() {
+            var openid = document.getElementById('query_openid').value.trim();
+
+            if(/^[0-9a-f]{32}$/.test(openid) == false) {
+                alert("OpenID格式不正确，请仔细检查。举例: 23251fc131e118d07fc9932f3c3de92c");
+                return;
+            }
+            $.ajax({
+              'url' : '/querytask',
+              'type' : 'GET',
+              'data' : {
+                'openid' : openid
+              },
+              'success' : function(data) {
+                alert(data);
+              }
+            });
+        }
+        function subm_addtask() {
+            var openid = document.getElementById('add_openid').value.trim();
+            var key = document.getElementById('add_key').value.trim();
+            var N = document.getElementById('add_N').value.trim();
+            var E = document.getElementById('add_E').value.trim();
+
+            if(/^[0-9a-f]{32}$/.test(openid) == false) {
+                alert("OpenID格式不正确，请仔细检查。举例: 23251fc131e118d07fc9932f3c3de92c");
+                return;
+            }
+            if(/^[0-9A-Z-]{19}$/.test(key) == false) {
+                alert("卡密格式不正确，请仔细检查。举例: AAAA-B234-C098-ZCXE");
+                return;
+            }
+            if(/^[0-9\.]+$/.test(N) == false || /^[0-9\.]+$/.test(E) == false) {
+                alert("经纬度格式不正确，请仔细检查。举例: 123.45678");
+                return;
+            }
+            $.ajax({
+              'url' : '/addtask',
+              'type' : 'GET',
+              'data' : {
+                'openid' : openid,
+                'key' : key,
+                'N' : N,
+                'E' : E
+              },
+              'success' : function(data) {
+                alert(data);
+              }
+            });
+        }
+    </script>
+		<div class="contents">
+			<br>
+			<div class="title">
+				<span>&nbsp;微助教在线自动签到(虚拟定位)</span>
+				<hr>
+			</div>
+	    	<div class="text">
+				<form name="addtask" onsubmit='return false;'>
+                    <span>&nbsp;&nbsp;用法: 先在<a href="https://www.zlfaka.com/details/AEDEDDA7">https://www.zlfaka.com/details/AEDEDDA7</a>购买一个卡密。</span>
+					<br>
+                    <span>&nbsp;&nbsp;然后打开"微信-微助教服务号-学生(S)-签到(C)"，在<strong>页面加载完成之前</strong>快速按下右上角的三个点，选择复制链接。</span>
+					<br>
+                    <span>&nbsp;&nbsp;找到链接中的"openid="这几个字符，后面跟着一串16进制数字就是openid。</span>
+					<br>
+					<span>&nbsp;&nbsp;将你购买的卡密和openid在上课前输入到这里。</span>
+					<br>
+                    <span>&nbsp;&nbsp;<strong>OpenID会在大约两小时后失效，请勿过早添加任务。</strong></span>
+					<br>
+					<span>&nbsp;&nbsp;OpenID:<input type="text" name="openid" class="inputAreaCss" id="add_openid"/>
+                    <br>
+                    <span>&nbsp;&nbsp;卡密:<input type="text" name="key" class="inputAreaCss" id="add_key"/>
+					<br>
+					<span>&nbsp;&nbsp;签到地点经纬度[东经]:<input type="text" name="E" class="inputAreaCss" id="add_E"/>
+                    <br>
+                    <span>&nbsp;&nbsp;签到地点经纬度[北纬]:<input type="text" name="N" class="inputAreaCss" id="add_N"/>
+                    <input type="submit" class="inputButtonCss" value="添加任务" onclick='subm_addtask();' /></span>
+				</form>
+			</div>
+			<div class="text">
+				<form action="/querytask" method="get" name="querytask" onsubmit='return false;'>
+					<span>&nbsp;&nbsp;本人不会前端。因为作业太多也没时间写后端。这页面凑合能用就行，能解决问题就好。如果系统爆掉了请联系qq或email退款(提供卡密截图)。</span>
+					<br>
+					<span>&nbsp;&nbsp;OpenID:<input type="text" name="openid" class="inputAreaCss" id="query_openid"/>
+                    <input type="submit" class="inputButtonCss" value="查询状态" onclick='subm_querytask();' /></span>
+				</form>
+			</div>
+			<div class="footer">
+				<hr>
+				<span>提示：</span>
+				<br>
+				<span>OpenID会在大约2小时后失效，这是不确定事件。OpenID失效时你的服务结束。</span>
+				<br>
+				<span>获取OpenID之后一定不要再次打开微助教服务号的任何页面。这将导致OpenID立即失效。</span>
+				<br>
+				<span>目前服务器设定为每20秒轮询一次所有用户的任务，发现可以签到后立即发起签到。</span>
+				<br>
+				<span>按下"添加任务"按钮时，你的卡密立即失效。</span>
+				<br>
+                <span><strong>我推荐Linux和MacOS用户使用curl操作这一程序，请阅读本网页的注释获取详细API。</strong></span>
+				<br>
+				<hr>
+				<span>常用经纬度：</span>
+				<br>
+				<span>东九楼C 30.513278°N 114.42629°E</span>
+				<br>
+				<span>西十二楼 30.508914°N 114.40718°E</span>
+				<br>
+				<span>西五楼 30.511227°N 114.41021°E</span>
+				<br>
+				<span>南一楼 30.509595°N 114.41374°E</span>
+                <br>
+				<hr>
+			</div>
+			<span>&nbsp;Copyright ©2016-2018&nbsp;recolic.net&nbsp;&nbsp;All rights reserved</span>
+	</body>
+</html>
+
