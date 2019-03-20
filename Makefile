@@ -1,9 +1,16 @@
 CC ?= gcc
 
-all:
+.PRONY: daemon.c verify.c
+
+all: daemon.c verify.c
+	eval $(CC) `python-config --cflags --ldflags` daemon.c verify.c -o daemon
+
+daemon.c:
 	cython -3 --embed daemon.py
-	eval $(CC) `python-config --cflags --ldflags` daemon.c -o daemon
+
+verify.c:
+	cython -3 verify.py
 
 clean:
-	rm -f daemon.c daemon
+	rm -f daemon.c verify.c daemon
 
