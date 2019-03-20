@@ -1,6 +1,6 @@
 CC ?= gcc
 
-.PRONY: daemon.c verify.c
+.PHONY: daemon.c verify.c
 
 all: daemon.c verify.c
 	eval $(CC) `python-config --cflags --ldflags` daemon.c verify.c -o daemon

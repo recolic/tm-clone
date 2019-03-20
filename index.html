@@ -100,6 +100,11 @@ curl 'https://tm.recolic.net/addtask?openid=23251fc131e118d07fc9932f3c3de92c&N=3
                 alert("经纬度格式不正确，请仔细检查。举例: 123.45678");
                 return;
             }
+            if(parseFloat(N) > 50.0 || parseFloat(E) < 100.0 || parseFloat(E) > 130.0) {
+                if(!confirm("请再次确认你的签到位置: " + E + "°E, " + N + "°N 是否正确? 此经纬度似乎不在中国境内。")) {
+                    return;
+                }
+            }
             $.ajax({
               'url' : '/addtask',
               'type' : 'GET',
@@ -133,13 +138,13 @@ curl 'https://tm.recolic.net/addtask?openid=23251fc131e118d07fc9932f3c3de92c&N=3
 					<br>
                     <span>&nbsp;&nbsp;<strong>OpenID会在大约两小时后失效，请勿过早添加任务。</strong></span>
 					<br>
-					<span>&nbsp;&nbsp;OpenID:<input type="text" name="openid" class="inputAreaCss" id="add_openid"/>
+					<span>&nbsp;&nbsp;OpenID:<input type="text" name="openid" class="inputAreaCss" id="add_openid"/></span>
                     <br>
-                    <span>&nbsp;&nbsp;卡密:<input type="text" name="key" class="inputAreaCss" id="add_key"/>
+                    <span>&nbsp;&nbsp;卡密:<input type="text" name="key" class="inputAreaCss" id="add_key"/></span>
 					<br>
-					<span>&nbsp;&nbsp;签到地点经纬度[东经]:<input type="text" name="E" class="inputAreaCss" id="add_E"/>
+					<span>&nbsp;&nbsp;签到地点经纬度[东经]:<input type="text" name="E" class="inputAreaCss" id="add_E"/></span>
                     <br>
-                    <span>&nbsp;&nbsp;签到地点经纬度[北纬]:<input type="text" name="N" class="inputAreaCss" id="add_N"/>
+                    <span>&nbsp;&nbsp;签到地点经纬度[北纬]:<input type="text" name="N" class="inputAreaCss" id="add_N"/></span>
                     <input type="submit" class="inputButtonCss" value="添加任务" onclick='subm_addtask();' /></span>
 				</form>
 			</div>

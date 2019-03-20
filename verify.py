@@ -8,7 +8,7 @@ def verify_key(key):
     for line in cont.split('\n'):
         if line == '':
             continue
-        if line == key:
+        if line == key and not key_ok:
             key_ok = True
             print('key {} is accepted.'.format(key))
         else:
