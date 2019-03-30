@@ -41,7 +41,7 @@ import verify
 import sys
 
 try:
-    listen_port = sys.argv[1]
+    listen_port = int(sys.argv[1])
 except:
     listen_port = 25503
 
