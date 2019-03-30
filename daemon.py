@@ -38,7 +38,12 @@ import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import verify
 
-listen_port = 25503
+import sys
+
+try:
+    listen_port = sys.argv[1]
+except:
+    listen_port = 25503
 
 class my_handler(http.server.BaseHTTPRequestHandler):
     def query_task(self, openid):
