@@ -24,9 +24,17 @@ def teachermate_daemon():
         for prof in profiles:
             if prof.cookiefl == '':
                 continue
-            ret = subprocess.call(['./signin-once.fish', prof.openid, prof.N, prof.E, prof.cookiefl])
+            # subprocess.call is outdated. Now I'm using everything in docker so I won't support python<3.5 anymore
+            # ret = subprocess.call(['./signin-once.fish', prof.openid, prof.N, prof.E, prof.cookiefl])
+            completed = subprocess.run(['./signin-once.fish', prof.openid, prof.N, prof.E, prof.cookiefl], stdout=subprocess.PIPE)
+            ret = completed.return_code
             if ret == 0:
-                prof.status_string += '\nSuccessed at ' + str(datetime.datetime.now())
+                stdout = completed.stdout.decode('utf-8').strip()
+                def findStudentRankFromStdout(s):
+                    # {"signRank":34,"studentRank":1}
+                    pos = s.find('studentRank')
+                    return -1 if pos == -1 else int(s[pos+13:-1])
+                prof.status_string += '\nSuccessed at {}, You\'re the {}th student to signin!'.format(str(datetime.datetime.now()), findStudentRankFromStdout(stdout)) 
             elif ret == 1:
                 prof.status_string += '\nFailed to signin at ' + str(datetime.datetime.now())
             elif ret == 2:
