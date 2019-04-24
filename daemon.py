@@ -27,7 +27,7 @@ def teachermate_daemon():
             # subprocess.call is outdated. Now I'm using everything in docker so I won't support python<3.5 anymore
             # ret = subprocess.call(['./signin-once.fish', prof.openid, prof.N, prof.E, prof.cookiefl])
             completed = subprocess.run(['./signin-once.fish', prof.openid, prof.N, prof.E, prof.cookiefl], stdout=subprocess.PIPE)
-            ret = completed.return_code
+            ret = completed.returncode
             if ret == 0:
                 stdout = completed.stdout.decode('utf-8').strip()
                 def findStudentRankFromStdout(s):
