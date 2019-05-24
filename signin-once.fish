@@ -12,8 +12,10 @@ function try_signin_once --description "signin_once <openid> <N> <E> <tmpfl> <co
     set result_badid 2
     set result_nothing 3
 
-    set _url "https://www.teachermate.com.cn/wechat/wechat/guide/signin?openid=$_openid"
+    set _url "https://v18.teachermate.cn/wechat/wechat/guide/signin?openid=$_openid"
+    set _resign_url "https://v18.teachermate.cn/api/v1/wechat/re-auth?m=s_signin&code=$_openid&state=$_openid"
     curl -L "$_url" -v 2>$cookiefl > $tmpfl
+    curl -L "$_resign_url" -v 2>$cookiefl > $tmpfl
     if grep -F '{"data":\[\],"msg":"unauthorized"}' $tmpfl > /dev/null
         return $result_badid
     end
